@@ -1,9 +1,9 @@
-name: Update CTY plist mirror
+name: Update CTY files mirror
 
 on:
   schedule:
     - cron: '0 2 * * *'  # 每天 UTC 2:00（北京时间 10:00）
-  workflow_dispatch:     # 允许手动触发
+  workflow_dispatch:      # 允许手动触发
 
 jobs:
   update-cty:
@@ -16,33 +16,96 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Download latest cty.plist
+      - name: Download cty.plist
         run: |
           echo "📥 Downloading cty.plist from country-files.com..."
-          curl -fsSL --max-time 60 \
+          if curl -fsSL --max-time 60 \
             -H "User-Agent: Mozilla/5.0 (compatible; HamRadioBot/1.0)" \
             https://www.country-files.com/cty/cty.plist \
-            -o cty.plist
-
-          # 基本验证：检查是否是 XML plist（避免下载到 HTML 错误页）
-          if ! head -n 5 cty.plist | grep -q "<?xml"; then
-            echo "❌ Downloaded file does not look like a plist (maybe an error page)."
+            -o cty.plist; then
+            # 验证文件
+            if head -n 5 cty.plist | grep -q "<?xml"; then
+              echo "✅ Downloaded cty.plist ($(stat -c%s cty.plist) bytes)"
+              echo "CTY_PLIST_SIZE=$(stat -c%s cty.plist)" >> $GITHUB_ENV
+            else
+              echo "❌ cty.plist validation failed"
+              exit 1
+            fi
+          else
+            echo "❌ Failed to download cty.plist"
             exit 1
           fi
 
-          echo "✅ Downloaded cty.plist ($(stat -c%s cty.plist) bytes)"
+      - name: Download cty.dat
+        run: |
+          echo "📥 Downloading cty.dat from country-files.com..."
+          if curl -fsSL --max-time 60 \
+            -H "User-Agent: Mozilla/5.0 (compatible; HamRadioBot/1.0)" \
+            https://www.country-files.com/bigcty/cty.dat \
+            -o cty.dat; then
+            # 验证文件（检查是否包含有效的呼号数据）
+            if head -n 5 cty.dat | grep -q -E "[A-Z0-9]+:"; then
+              echo "✅ Downloaded cty.dat ($(stat -c%s cty.dat) bytes)"
+              echo "CTY_DAT_SIZE=$(stat -c%s cty.dat)" >> $GITHUB_ENV
+            else
+              echo "❌ cty.dat validation failed"
+              exit 1
+            fi
+          else
+            echo "❌ Failed to download cty.dat"
+            exit 1
+          fi
+
+      - name: Create update info file
+        run: |
+          CURRENT_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          echo "Creating update_info.json with timestamp: $CURRENT_TIME"
+          
+          cat > update_info.json << EOF
+          {
+            "last_updated": "$CURRENT_TIME",
+            "files": {
+              "cty.plist": {
+                "size": ${{ env.CTY_PLIST_SIZE }},
+                "source": "https://www.country-files.com/cty/cty.plist",
+                "description": "Country data in XML plist format"
+              },
+              "cty.dat": {
+                "size": ${{ env.CTY_DAT_SIZE }},
+                "source": "https://www.country-files.com/bigcty/cty.dat",
+                "description": "Extended country data in DAT format"
+              }
+            },
+            "mirror_urls": {
+              "cty.plist": [
+                "https://cdn.jsdelivr.net/gh/tyler4096/cty-mirror@main/cty.plist",
+                "https://raw.githubusercontent.com/tyler4096/cty-mirror/main/cty.plist"
+              ],
+              "cty.dat": [
+                "https://cdn.jsdelivr.net/gh/tyler4096/cty-mirror@main/cty.dat",
+                "https://raw.githubusercontent.com/tyler4096/cty-mirror/main/cty.dat"
+              ],
+              "update_info": [
+                "https://cdn.jsdelivr.net/gh/tyler4096/cty-mirror@main/update_info.json",
+                "https://raw.githubusercontent.com/tyler4096/cty-mirror/main/update_info.json"
+              ]
+            }
+          }
+          EOF
+          
+          echo "✅ Created update_info.json"
 
       - name: Commit and push if changed
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-          git add cty.plist
+          git add cty.plist cty.dat update_info.json
 
           if ! git diff --cached --quiet; then
-            git commit -m "Update cty.plist ($(date -u))"
+            git commit -m "Update CTY files ($(date -u '+%Y-%m-%d %H:%M:%S UTC'))"
             git push
-            echo "✅ Successfully committed and pushed cty.plist"
+            echo "✅ Successfully committed and pushed CTY files"
           else
-            echo "ℹ️ No changes detected in cty.plist. Skipping commit."
+            echo "ℹ️ No changes detected in CTY files. Skipping commit."
           fi
