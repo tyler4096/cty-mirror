@@ -2,9 +2,8 @@ name: Update CTY plist mirror
 
 on:
   schedule:
-    # 每天 UTC 时间 2:00 执行（北京时间 10:00）
-    - cron: '0 2 * * *'
-  workflow_dispatch:  # 允许手动触发
+    - cron: '0 2 * * *'  # 每天 UTC 2:00（北京时间 10:00）
+  workflow_dispatch:      # 允许手动触发
 
 jobs:
   update-cty:
@@ -12,34 +11,39 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          # 确保获取完整历史（对空仓库也安全）
+          fetch-depth: 0
 
       - name: Download latest cty.plist
         run: |
+          echo "📥 Downloading cty.plist from country-files.com..."
           curl -fsSL --max-time 60 \
             -H "User-Agent: Mozilla/5.0 (compatible; HamRadioBot/1.0)" \
             https://www.country-files.com/cty/cty.plist \
             -o cty.plist
 
-          # 简单验证是否是 plist（检查是否包含 <?xml）
-          if ! grep -q "<?xml" cty.plist; then
-            echo "Downloaded file is not a valid plist (maybe HTML error page)."
+          # 基本验证：检查是否是 XML plist（避免下载到 HTML 错误页）
+          if ! head -n 5 cty.plist | grep -q "<?xml"; then
+            echo "❌ Downloaded file does not look like a plist (maybe an error page)."
             exit 1
           fi
 
-          # 可选：打印版本信息（如果 plist 中有）
-          echo "Downloaded cty.plist (size: $(wc -c < cty.plist) bytes)"
+          echo "✅ Downloaded cty.plist ($(stat -c%s cty.plist) bytes)"
 
-      - name: Commit and push if changed
+      - name: Commit and push if changed (or first time)
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-          # 只有文件变化才提交
-          if ! git diff --quiet cty.plist; then
-            git add cty.plist
+          # 添加文件（无论是否已存在）
+          git add cty.plist
+
+          # 检查暂存区是否有变化
+          if ! git diff --cached --quiet; then
             git commit -m "Update cty.plist ($(date -u))"
             git push
-            echo "Updated and pushed new cty.plist"
+            echo "✅ Successfully committed and pushed cty.plist"
           else
-            echo "ℹ️ No changes detected. Skipping commit."
+            echo "ℹ️ No changes detected in cty.plist. Skipping commit."
           fi
