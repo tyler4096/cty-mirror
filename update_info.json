@@ -1,0 +1,29 @@
+{
+  "last_updated": "2025-10-08T16:12:04Z",
+  "files": {
+    "cty.plist": {
+      "size": 14197428,
+      "source": "https://www.country-files.com/cty/cty.plist",
+      "description": "Country data in XML plist format"
+    },
+    "cty.dat": {
+      "size": 339482,
+      "source": "https://www.country-files.com/bigcty/cty.dat",
+      "description": "Extended country data in DAT format"
+    }
+  },
+  "mirror_urls": {
+    "cty.plist": [
+      "https://cdn.jsdelivr.net/gh/tyler4096/cty-mirror@main/cty.plist",
+      "https://raw.githubusercontent.com/tyler4096/cty-mirror/main/cty.plist"
+    ],
+    "cty.dat": [
+      "https://cdn.jsdelivr.net/gh/tyler4096/cty-mirror@main/cty.dat",
+      "https://raw.githubusercontent.com/tyler4096/cty-mirror/main/cty.dat"
+    ],
+    "update_info": [
+      "https://cdn.jsdelivr.net/gh/tyler4096/cty-mirror@main/update_info.json",
+      "https://raw.githubusercontent.com/tyler4096/cty-mirror/main/update_info.json"
+    ]
+  }
+}
