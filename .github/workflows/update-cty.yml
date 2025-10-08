@@ -1,0 +1,45 @@
+name: Update CTY plist mirror
+
+on:
+  schedule:
+    # 每天 UTC 时间 2:00 执行（北京时间 10:00）
+    - cron: '0 2 * * *'
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  update-cty:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download latest cty.plist
+        run: |
+          curl -fsSL --max-time 60 \
+            -H "User-Agent: Mozilla/5.0 (compatible; HamRadioBot/1.0)" \
+            https://www.country-files.com/cty/cty.plist \
+            -o cty.plist
+
+          # 简单验证是否是 plist（检查是否包含 <?xml）
+          if ! grep -q "<?xml" cty.plist; then
+            echo "Downloaded file is not a valid plist (maybe HTML error page)."
+            exit 1
+          fi
+
+          # 可选：打印版本信息（如果 plist 中有）
+          echo "Downloaded cty.plist (size: $(wc -c < cty.plist) bytes)"
+
+      - name: Commit and push if changed
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+          # 只有文件变化才提交
+          if ! git diff --quiet cty.plist; then
+            git add cty.plist
+            git commit -m "Update cty.plist ($(date -u))"
+            git push
+            echo "Updated and pushed new cty.plist"
+          else
+            echo "ℹ️ No changes detected. Skipping commit."
+          fi
