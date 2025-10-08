@@ -3,16 +3,17 @@ name: Update CTY plist mirror
 on:
   schedule:
     - cron: '0 2 * * *'  # 每天 UTC 2:00（北京时间 10:00）
-  workflow_dispatch:      # 允许手动触发
+  workflow_dispatch:     # 允许手动触发
 
 jobs:
   update-cty:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          # 确保获取完整历史（对空仓库也安全）
           fetch-depth: 0
 
       - name: Download latest cty.plist
@@ -31,15 +32,13 @@ jobs:
 
           echo "✅ Downloaded cty.plist ($(stat -c%s cty.plist) bytes)"
 
-      - name: Commit and push if changed (or first time)
+      - name: Commit and push if changed
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-          # 添加文件（无论是否已存在）
           git add cty.plist
 
-          # 检查暂存区是否有变化
           if ! git diff --cached --quiet; then
             git commit -m "Update cty.plist ($(date -u))"
             git push
