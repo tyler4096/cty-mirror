@@ -152768,6 +152768,29 @@
   <key>ExactCallsign</key>
   <false/>
   </dict>
+<key>AM800TUI</key>
+  <dict>
+  <key>Country</key>
+  <string>Spain</string>
+  <key>Prefix</key>
+  <string>EA</string>
+  <key>ADIF</key>
+  <integer>281</integer>
+  <key>CQZone</key>
+  <integer>14</integer>
+  <key>ITUZone</key>
+  <integer>37</integer>
+  <key>Continent</key>
+  <string>EU</string>
+  <key>Latitude</key>
+  <real>42.57</real>
+  <key>Longitude</key>
+  <real>6.17</real>
+  <key>GMTOffset</key>
+  <real>-1.0</real>
+  <key>ExactCallsign</key>
+  <true/>
+  </dict>
 <key>AM2</key>
   <dict>
   <key>Country</key>
@@ -154814,29 +154837,6 @@
   <real>0.0</real>
   <key>ExactCallsign</key>
   <false/>
-  </dict>
-<key>EA3NT/8</key>
-  <dict>
-  <key>Country</key>
-  <string>Canary Islands</string>
-  <key>Prefix</key>
-  <string>EA8</string>
-  <key>ADIF</key>
-  <integer>29</integer>
-  <key>CQZone</key>
-  <integer>33</integer>
-  <key>ITUZone</key>
-  <integer>36</integer>
-  <key>Continent</key>
-  <string>AF</string>
-  <key>Latitude</key>
-  <real>28.32</real>
-  <key>Longitude</key>
-  <real>15.85</real>
-  <key>GMTOffset</key>
-  <real>0.0</real>
-  <key>ExactCallsign</key>
-  <true/>
   </dict>
 <key>EA8RM/P</key>
   <dict>
@@ -228047,29 +228047,6 @@
   <key>ExactCallsign</key>
   <true/>
   </dict>
-<key>K4GUF</key>
-  <dict>
-  <key>Country</key>
-  <string>United States</string>
-  <key>Prefix</key>
-  <string>K</string>
-  <key>ADIF</key>
-  <integer>291</integer>
-  <key>CQZone</key>
-  <integer>4</integer>
-  <key>ITUZone</key>
-  <integer>8</integer>
-  <key>Continent</key>
-  <string>NA</string>
-  <key>Latitude</key>
-  <real>36.38</real>
-  <key>Longitude</key>
-  <real>87.03</real>
-  <key>GMTOffset</key>
-  <real>6.0</real>
-  <key>ExactCallsign</key>
-  <true/>
-  </dict>
 <key>K4HAL</key>
   <dict>
   <key>Country</key>
@@ -247068,6 +247045,29 @@
   <key>ExactCallsign</key>
   <true/>
   </dict>
+<key>K9P</key>
+  <dict>
+  <key>Country</key>
+  <string>Puerto Rico</string>
+  <key>Prefix</key>
+  <string>KP4</string>
+  <key>ADIF</key>
+  <integer>202</integer>
+  <key>CQZone</key>
+  <integer>8</integer>
+  <key>ITUZone</key>
+  <integer>11</integer>
+  <key>Continent</key>
+  <string>NA</string>
+  <key>Latitude</key>
+  <real>18.18</real>
+  <key>Longitude</key>
+  <real>66.55</real>
+  <key>GMTOffset</key>
+  <real>4.0</real>
+  <key>ExactCallsign</key>
+  <true/>
+  </dict>
 <key>KD2VAF</key>
   <dict>
   <key>Country</key>
@@ -247230,6 +247230,29 @@
   <true/>
   </dict>
 <key>NP2R/4</key>
+  <dict>
+  <key>Country</key>
+  <string>Puerto Rico</string>
+  <key>Prefix</key>
+  <string>KP4</string>
+  <key>ADIF</key>
+  <integer>202</integer>
+  <key>CQZone</key>
+  <integer>8</integer>
+  <key>ITUZone</key>
+  <integer>11</integer>
+  <key>Continent</key>
+  <string>NA</string>
+  <key>Latitude</key>
+  <real>18.18</real>
+  <key>Longitude</key>
+  <real>66.55</real>
+  <key>GMTOffset</key>
+  <real>4.0</real>
+  <key>ExactCallsign</key>
+  <true/>
+  </dict>
+<key>VERSION</key>
   <dict>
   <key>Country</key>
   <string>Puerto Rico</string>
@@ -641242,7 +641265,7 @@
   <key>ExactCallsign</key>
   <false/>
   </dict>
-<key>VER20260115</key>
+<key>VER20260117</key>
   <dict>
   <key>Country</key>
   <string>Canada</string>
@@ -657134,29 +657157,6 @@
   <real>6.0</real>
   <key>ExactCallsign</key>
   <false/>
-  </dict>
-<key>VERSION</key>
-  <dict>
-  <key>Country</key>
-  <string>El Salvador</string>
-  <key>Prefix</key>
-  <string>YS</string>
-  <key>ADIF</key>
-  <integer>74</integer>
-  <key>CQZone</key>
-  <integer>7</integer>
-  <key>ITUZone</key>
-  <integer>11</integer>
-  <key>Continent</key>
-  <string>NA</string>
-  <key>Latitude</key>
-  <real>14.00</real>
-  <key>Longitude</key>
-  <real>89.00</real>
-  <key>GMTOffset</key>
-  <real>6.0</real>
-  <key>ExactCallsign</key>
-  <true/>
   </dict>
 <key>YT</key>
   <dict>
