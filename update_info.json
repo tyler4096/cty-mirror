@@ -1,13 +1,13 @@
 {
-  "last_updated": "2026-08-26T02:55:39Z",
+  "last_updated": "2026-08-28T13:31:30Z",
   "files": {
     "cty.plist": {
-      "size": 14385197,
+      "size": 14381773,
       "source": "https://www.country-files.com/cty/cty.plist",
       "description": "Country data in XML plist format"
     },
     "cty.dat": {
-      "size": 349718,
+      "size": 349937,
       "source": "https://www.country-files.com/bigcty/cty.dat",
       "description": "Extended country data in DAT format"
     }
